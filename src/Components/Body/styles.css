@@ -1,3 +1,73 @@
-.table-body {
-  
+.table-row > td {
+  text-align: left;
+  padding: 16px;
+}
+
+.table-row-expand-icon {
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .3s;
+  position: relative;
+  display: inline-flex;
+  float: left;
+  box-sizing: border-box;
+  width: 17px;
+  height: 17px;
+  margin-top: 2.5005px;
+  margin-right: 8px;
+  padding: 0;
+  color: inherit;
+  line-height: 17px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+  outline: none;
+  transform: scale(.94117647);
+  transform-origin: bottom;
+  transition: all .3s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.table-row-expand-icon:hover {
+  border-color: #00ff00;
+}
+
+.table-row-expand-icon::before {
+  position: absolute;
+  background: currentColor;
+  transition: transform .3s ease-out;
+  content: "";
+  top: 7px;
+  right: 3px;
+  left: 3px;
+  height: 1px;
+}
+
+.table-row-expand-icon::after {
+  position: absolute;
+  background: currentColor;
+  transition: transform .3s ease-out;
+  content: "";
+  top: 3px;
+  bottom: 3px;
+  left: 7px;
+  width: 1px;
+  transform: rotate(90deg);
+}
+
+.table-row-expand-icon-collapsed::before {
+  transform: rotate(-180deg);
+}
+
+.table-row-expand-icon-collapsed::after {
+  transform: rotate(0deg);
+}
+
+.table-row-expand-icon-spaced {
+  background: 0 0;
+  border: 0;
+  visibility: hidden;
 }

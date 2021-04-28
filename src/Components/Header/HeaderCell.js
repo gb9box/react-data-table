@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import PropTypes from "proptypes";
 
-import "./styles.css";
 import { ReactComponent as AscendSvg } from "../../assets/images/ascend.svg";
 import { ReactComponent as DescendSvg } from "../../assets/images/descend.svg";
 import { ReactComponent as FilterSvg } from "../../assets/images/filter.svg";
+import "./styles.css";
 
+const sortDirections = ["descend", "ascend"];
 function HeaderCell({ column, onClickSort, onClickFilter }) {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [filter, setFilter] = useState("");
@@ -31,7 +32,7 @@ function HeaderCell({ column, onClickSort, onClickFilter }) {
             column.sorter
               ? onClickSort(
                   column.key,
-                  column.sortDirections[column.direction],
+                  sortDirections[column.direction],
                   column.sorter
                 )
               : e.defaultPrevented()

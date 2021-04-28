@@ -1,16 +1,20 @@
-import React from "react";
 import PropTypes from "proptypes";
 
-const Body = ({ data = [], keys = [] }) => {
+import BodyRow from "./BodyRow";
+import "./styles.css";
+
+const Body = ({ data = [], keys = [], childrenCount }) => {
   return (
     <tbody className="table-body">
       {data && data.length > 0 ? (
         data.map((row) => (
-          <tr key={`tr-${row.key}`}>
-            {keys.map((key) => (
-              <td key={`td-${key}`}>{row[key]}</td>
-            ))}
-          </tr>
+          <BodyRow
+            key={`tr-${row.key}`}
+            row={row}
+            keys={keys}
+            childrenCount={childrenCount}
+            depth={0}
+          />
         ))
       ) : (
         <tr>
@@ -24,6 +28,7 @@ const Body = ({ data = [], keys = [] }) => {
 Body.propTypes = {
   data: PropTypes.array,
   keys: PropTypes.array,
+  childrenCount: PropTypes.number,
 };
 
 export default Body;

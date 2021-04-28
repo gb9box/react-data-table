@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import PropTypes from "proptypes";
 
 import Header from "../Header";
@@ -6,8 +6,10 @@ import Body from "../Body";
 import Footer from "../Footer";
 import "./styles.css";
 
-const Table = ({ columns = [], dataSource = [] }) => {
+const Table = ({ columns = [], dataSource = [], extraOptions }) => {
+  const { pageSize = 5, childrenCount = 3 } = extraOptions;
   const [data, setData] = useState(dataSource);
+  const [curPage, setCurrentPage] = useState(1);
 
   const onChangeFilter = useCallback(
     (option) => {
@@ -37,10 +39,19 @@ const Table = ({ columns = [], dataSource = [] }) => {
             columns={columns}
             onChange={(option) => onChangeFilter(option)}
           />
-          <Body data={data} keys={columns.map((col) => col.key)} />
+          <Body
+            data={data.slice((curPage - 1) * pageSize, curPage * pageSize)}
+            keys={columns.map((col) => col.key)}
+            childrenCount={childrenCount}
+          />
         </table>
       </div>
-      <Footer />
+      <Footer
+        curPage={curPage}
+        total={data.length}
+        pageSize={pageSize}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };
@@ -48,6 +59,7 @@ const Table = ({ columns = [], dataSource = [] }) => {
 Table.propTypes = {
   columns: PropTypes.array,
   dataSource: PropTypes.array,
+  extraOptions: PropTypes.object,
 };
 
 export default Table;

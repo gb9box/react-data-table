@@ -1,5 +1,5 @@
-.table-container {
-  border: 1px solid black;
+.table-container > table {
+  border-spacing: 0;
 }
 
 .table-content {
