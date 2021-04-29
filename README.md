@@ -1,8 +1,236 @@
-# Getting Started with Create React App
+# React Data Table
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Reusable react data table component without using any third-party libraries.
 
-## Available Scripts
+## Key Features
+
+- Sorting
+- Filtering
+- Data Grouping
+- Pagination
+
+## Requirements
+
+It requires the following be installed in your project:
+
+- Node v10+
+- React 17.0.2+
+
+## Installation
+
+React Data Table no need install third-party libraries.
+
+```sh
+npm install
+```
+
+or
+
+```sh
+yarn install
+```
+
+## Usage
+
+```js
+import Table from "./components/Table";
+
+const columns = [
+  {
+    title: "Name",
+    key: "name",
+  },
+  {
+    title: "Age",
+    key: "age",
+  },
+  {
+    title: "Address",
+    key: "address",
+  },
+];
+
+const dataSource = [
+  { name: "Jack", age: 28, address: "some where", key: "1" },
+  { name: "Rose", age: 36, address: "some where", key: "2" },
+];
+
+React.render(<Table columns={columns} dataSource={dataSource} />, mountNode);
+```
+
+## API
+
+### Properties
+
+| Name         | Type     | Default                          | Description                      |
+| ------------ | -------- | -------------------------------- | -------------------------------- |
+| columns      | Object[] |                                  | The columns config of table      |
+| dataSource   | Object[] |                                  | data record array to be rendered |
+| extraOptions | Object   | { childrenCount: 3, pageSize: 5} | table custom props               |
+
+### Column Props
+
+| Name     | Type                    | Default | Description                                   |
+| -------- | ----------------------- | ------- | --------------------------------------------- |
+| key      | String                  |         | key of this column                            |
+| title    | React Node              |         | title of this column                          |
+| sorter   | Function(a, b)          |         | Set custom sort props per each header cell.   |
+| onFilter | Function(value, record) |         | Set custom filter props per each header cell. |
+
+### Sorting
+
+Use `sorter` to make a column sortable. `sorter` can be a function of the type `function(a, b) { ... }` for sorting data locally.
+
+```js
+import Table from "./components/Table";
+
+const columns = [
+  {
+    title: "Name",
+    key: "name",
+    sorter: (a, b) => (a.name > b.name ? 1 : -1),
+  },
+  {
+    title: "Age",
+    key: "age",
+    sorter: (a, b) => (a.age > b.age ? 1 : -1),
+  },
+  {
+    title: "Address",
+    key: "address",
+    sorter: (a, b) => (a.address > b.address ? 1 : -1),
+  },
+];
+
+const dataSource = [
+  { name: "Jack", age: 28, address: "some where", key: "1" },
+  { name: "Rose", age: 36, address: "some where", key: "2" },
+];
+
+React.render(<Table columns={columns} dataSource={dataSource} />, mountNode);
+```
+
+### Filtering
+
+Use `onFilter` to generate a filter menu in columns, `onFilter` to determine filtered result.
+
+```js
+import Table from "./components/Table";
+
+const columns = [
+  {
+    title: "Name",
+    key: "name",
+    sorter: (a, b) => (a.name > b.name ? 1 : -1),
+    onFilter: (value, record) =>
+      record.name.toLowerCase().includes(value.toLowerCase()),
+  },
+  {
+    title: "Age",
+    key: "age",
+    sorter: (a, b) => (a.age > b.age ? 1 : -1),
+  },
+  {
+    title: "Address",
+    key: "address",
+    sorter: (a, b) => (a.address > b.address ? 1 : -1),
+    onFilter: (value, record) =>
+      record.address.toLowerCase().includes(value.toLowerCase()),
+  },
+];
+
+const dataSource = [
+  { name: "Jack", age: 28, address: "some where", key: "1" },
+  { name: "Rose", age: 36, address: "some where", key: "2" },
+];
+
+React.render(<Table columns={columns} dataSource={dataSource} />, mountNode);
+```
+
+### Grouping Data
+
+Display group data in Table when there is a field key `children` in `dataSource`.
+
+Use `childrenCount` in `extraOptions` to make a limit for each grouped row’s children to display.
+
+```js
+import Table from "./components/Table";
+
+const columns = [
+  {
+    title: "Name",
+    key: "name",
+  },
+  {
+    title: "Age",
+    key: "age",
+  },
+  {
+    title: "Address",
+    key: "address",
+  },
+];
+
+const dataSource = [
+  {
+    name: "Jack",
+    age: 28,
+    address: "some where",
+    key: "1",
+    children: [
+      { name: "Jack 10", age: 36, address: "some where", key: "10" },
+      { name: "Jack 11", age: 36, address: "some where", key: "11" },
+      { name: "Jack 12", age: 36, address: "some where", key: "12" },
+      {
+        name: "Jack 13",
+        age: 36,
+        address: "some where",
+        key: "13",
+        children: [
+          { name: "Jack 130", age: 36, address: "some where", key: "130" },
+          { name: "Jack 131", age: 36, address: "some where", key: "131" },
+          { name: "Jack 132", age: 36, address: "some where", key: "132" },
+        ],
+      },
+    ],
+  },
+  { name: "Rose", age: 36, address: "some where", key: "2" },
+];
+
+const extraOption = {
+  childrenCount: 5, // determine limit of children count per each grouped rows.
+};
+
+React.render(
+  <Table
+    columns={columns}
+    dataSource={dataSource}
+    extraOptions={extraOptions}
+  />,
+  mountNode
+);
+```
+
+### Pagination
+
+Use `pageSize` in `extraOptions` to determine row count per page.
+
+```js
+const extraOption = {
+  pageSize: 10,
+};
+
+React.render(
+  <Table
+    columns={columns}
+    dataSource={dataSource}
+    extraOptions={extraOptions}
+  />,
+  mountNode
+);
+```
+
+## Development
 
 In the project directory, you can run:
 
@@ -28,43 +256,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
